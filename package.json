@@ -11,7 +11,9 @@
     "underscore.string": "^3.0.3",
     "websocket": "^1.0.18"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.11"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
