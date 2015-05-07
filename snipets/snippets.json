@@ -1,0 +1,20 @@
+/* Avatar */
+
+var account_name="half";
+var name="half";
+var skin="half";
+var move_speed=10;
+var jump_speed=22;
+var width=30;
+var height=49;
+
+var id=db.avatars.find().sort({"id":-1}).limit(1).toArray()[0].id + 1;
+db.avatars.insert({ "acceleration" : { "x" : 0, "y" : 0 }, "velocity" : { "x" : 0, "y" : 0 }, "account_name" : account_name, "id" : id, "jump_speed" : jump_speed, "move_speed" : move_speed, "name" : name, "position" : { "y" : 0, "x" : 0 }, "size" : { "x" : width, "y" : height }, "skin" : skin });
+
+
+/* Accounts */
+
+var login="half3";
+var password="robert";
+var id=db.accounts.find().sort({"id":-1}).limit(1).toArray()[0].id + 1;
+db.accounts.insert({ "login" : login, "password" : password, "id" : id});
