@@ -38,13 +38,7 @@ var Server = function() {
 
 	this.scene              = new Scene(Config.Scene);
 	this.listen_port        = Config.Server.server_port;
-	this.mongodb_server     = Config.DB.ip;
-	this.mongodb_port       = Config.DB.port;
-	this.mongodb_name       = Config.DB.name;
-	this.mongodb_user       = Config.DB.user;
-	this.mongodb_password   = Config.DB.password;
 	this.needSync           = false;
-	this.mongodb_res        = null; //-> ressource mongodb
 	this.lastUpdate         = null;
 	this.lastSync           = null;
 	this.lastAliveSync      = null;
