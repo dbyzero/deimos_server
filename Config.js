@@ -30,7 +30,7 @@ Config.Scene.domId = 'gamezone';
 Config.Scene.regexUrl = 'http://localhost/deimos_client';
 
 Config.API = {};
-Config.API.url = 'http://localhost:39999/';
+Config.API.url = 'http://api:39999/';
 
 /**
  * Network
