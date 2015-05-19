@@ -143,16 +143,18 @@ Server.prototype.init = function() {
 	
 	//start websocket
 	this.httpServer.listen(this.listen_port, function() {
-		Log.success('Websocket binded, connection key : '.green.bold + this._connectionKey);
+		Log.success('Websocket binded'.green.bold);
 
 		//Define and connect API
+		Log.info('Connecting to API...');
 		this.API = restify.createJsonClient({
-			url: 'http://localhost:10081/',
+			url: Config.API.url,
 			agent:false,
 			headers:{
 				// connection:'close'
 			}
 		});
+		Log.success('API connected'.green.bold);
 
 		this.emit('INITIALIZED',this);
 	}.bind(this));
