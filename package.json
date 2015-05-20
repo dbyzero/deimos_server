@@ -2,7 +2,7 @@
   "name": "deimos_server",
   "version": "0.0.1",
   "description": "Server part of deimos project",
-  "main": "main.js",
+  "main": "app.js",
   "dependencies": {
     "colors": "^1.1.0",
     "q": "^1.3.0",

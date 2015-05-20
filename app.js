@@ -29,7 +29,7 @@ try {
 	}) ;
 
 	GLOBAL.server.on('STARTED',function(){
-		Log.success('Server started !'.green);
+		Log.success('Server started on port '+1337+'!'.green);
 	}) ;
 } catch(e) {
 	console.log("error catched in main script")
