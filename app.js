@@ -20,7 +20,7 @@ try {
 	GLOBAL._t = MessageHandler.CODE[ Config.Network.compression ];
 
 	//Start server
-	GLOBAL.server = new Server(1337,'localhost',27017,'deimos_test',null,null) ;
+	GLOBAL.server = new Server() ;
 
 	GLOBAL.server.init();
 
@@ -29,7 +29,7 @@ try {
 	}) ;
 
 	GLOBAL.server.on('STARTED',function(){
-		Log.success('Server started on port '+1337+'!'.green);
+		Log.success('Server started on port '+Config.Server.server_port+'!'.green);
 	}) ;
 } catch(e) {
 	console.log("error catched in main script")
