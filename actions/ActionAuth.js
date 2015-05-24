@@ -75,6 +75,8 @@ ActionAuth.prototype = {
 				//adding info game zone
 				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_NAME']] = GLOBAL.server.scene.name;
 				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_DOM_ID']] = GLOBAL.server.scene.domId;
+				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_WIDTH']] = GLOBAL.server.scene.width;
+				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_HEIGHT']] = GLOBAL.server.scene.height;
 				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_BLOCKS']] = GLOBAL.server.scene.blocks;
 				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_MAX_INSTANCE']] = GLOBAL.server.scene.maxInstance;
 				responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_MAX_USER']] = GLOBAL.server.scene.maxUser;
