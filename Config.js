@@ -96,4 +96,7 @@ for (var idx = process.argv.length - 1; idx >= 0; idx--) {
 if(args['env'] === undefined) throw new Error('No environement specified');
 if(config[args['env']] === undefined) throw new Error('Unknow environnement');
 
+console.log('Using configuration : ');
+console.log(config[args['env']]);
+
 module.exports = config[args['env']];
