@@ -41,6 +41,10 @@ ActionHandle.load = function(connection,e) {
 				var auth = new ActionAuth();
 				auth.load(connection,e);
 				break ;
+			case GLOBAL._t['AUTH_BY_TOKEN'] :
+				var auth = new ActionAuth();
+				auth.loadByToken(connection,e);
+				break ;
 			case GLOBAL._t['ACTION_CHOOSE_CHAR'] :
 				var chooseAvatar = new ActionChooseAvatar() ;
 				chooseAvatar.load(connection,e) ;
