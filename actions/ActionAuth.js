@@ -56,7 +56,7 @@ ActionAuth.prototype = {
 
 		GLOBAL.server.API.post(encodeURI('/account/registerbytoken/'+sessionid), function(err, req, res, result) {
 			if(err !== null) {
-				console.log('API Error'.red+' : '+err+''.bold)
+				console.log('API Error'.red+' : '+err+''.bold + ' token:'+sessionid);
 				MessageHandler.sendErrorMessage(connection,err.body) ;
 				return;
 			}

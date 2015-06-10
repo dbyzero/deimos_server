@@ -108,29 +108,13 @@ var Server = function() {
 		//note : errors trigg close event too
 		connection.on('close', function(reason,description) {
 			// delete session
-			if(this.sessionid !== undefined) {
-				var sessionid = this.sessionid;
-				GLOBAL.server.API.del('/session/'+sessionid,function(err,result){
-					if(err) {
-						if(err.name === 'NotFoundError') {
-							Log.warning('Session '+sessionid+' already removed !');
-							return;
-						}
-						throw err;
-					} 
-					//remove session from scene, connection and connections list
-					delete GLOBAL.server.connections[sessionid] ; 
-					delete connection[sessionid] ;
-					GLOBAL.server.scene.removeAvatar(sessionid);
-					Log.info(connection.remoteAddress + ' logout from session '.green + sessionid) ;
-					Log.info('Session '+ sessionid + ' is deleted') ;
-					GLOBAL.server.needSync = true;
-				});
+			if(connection.sessionid !== undefined) {
+				this.removeSession(connection);
 			}
-			Log.info(this.remoteAddress + " disconnected.".yellow + ', reason : ' + description);
-		});
+			Log.info(connection.remoteAddress + " disconnected.".yellow + ', reason : ' + description);
+		}.bind(this));
 
-	});
+	}.bind(this));
 
 }
 
@@ -211,6 +195,16 @@ Server.prototype.syncScene = function() {
 	this.needSync = false;
 	this.lastSync = now;
 	this.lastAliveSync = now;
+}
+
+Server.prototype.removeSession = function(connection) {
+	//remove session from scene, connection and connections list
+	var sessionid = connection.sessionid
+	delete GLOBAL.server.connections[sessionid] ; 
+	delete connection[sessionid] ;
+	GLOBAL.server.scene.removeAvatar(sessionid);
+	Log.info(connection.remoteAddress + ' logout from session '.green + sessionid) ;
+	GLOBAL.server.needSync = true;
 }
 
 //return the Server class
