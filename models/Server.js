@@ -36,7 +36,6 @@ var Server = function() {
 	//array of connection
 	this.connections = {};
 
-	this.scene              = new Scene(Config.Scene);
 	this.listen_port        = Config.Server.server_port;
 	this.needSync           = false;
 	this.lastUpdate         = null;
@@ -147,6 +146,9 @@ Server.prototype.init = function() {
 
 
 Server.prototype.start = function() {
+	//to change
+	this.scene = new Scene(Config.Scene);
+
 	this.API.del(encodeURI('/session/clean/'+this.scene.name),function(err,req,res,data){
 			if(err) throw err;
 		}.bind(this)

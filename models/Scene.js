@@ -29,11 +29,9 @@
 		this.projectilesToCleanNextStep = [];
 		this.attackZones = {};
 		this.name = config.name;
-		this.domId = config.domId;
 		this.width = config.width;
 		this.height = config.height;
 		this.blocks = config.blocks;
-		this.regexUrl = config.regexUrl;
 		this.maxInstance = config.maxInstance;
 		this.minDeltaSaveElement = config.minDeltaSaveElement;
 		this.maxUser = config.maxUser;
