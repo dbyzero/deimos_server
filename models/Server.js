@@ -147,24 +147,32 @@ Server.prototype.init = function() {
 
 Server.prototype.start = function() {
 	//to change
-	this.scene = new Scene(Config.Scene);
+	this.API.get(encodeURI('/level/byname/'+Config.level),function(err,req,res,level){
+			console.log('Level template : ');
+			console.log(level);
 
-	this.API.del(encodeURI('/session/clean/'+this.scene.name),function(err,req,res,data){
 			if(err) throw err;
+			this.scene = new Scene(Config, level);
+
+			this.API.del(encodeURI('/session/clean/'+this.scene.name),function(err,req,res,data){
+					if(err) throw err;
+				}.bind(this)
+			);
+			var _t = GLOBAL._t;
+			this.loop = new Loop( 'main_loop', Config.Engine.MAIN_LOOP_DELAY, 0 ) ;
+
+			/**
+			 * GAME LOOP 
+			 */
+			var loopingFunction = function() {
+				this.update();
+			}
+
+			this.loop.start(loopingFunction.bind(this)) ;
+			this.emit('STARTED',this);
 		}.bind(this)
 	);
-	var _t = GLOBAL._t;
-	this.loop = new Loop( 'main_loop', Config.Engine.MAIN_LOOP_DELAY, 0 ) ;
-
-	/**
-	 * GAME LOOP 
-	 */
-	var loopingFunction = function() {
-		this.update();
-	}
-
-	this.loop.start(loopingFunction.bind(this)) ;
-	this.emit('STARTED',this);
+	
 
 };
 

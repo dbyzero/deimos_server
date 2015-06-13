@@ -21,17 +21,19 @@
 	var FactoryMonster			=	require('../factory/FactoryMonster.js');
 	var FactoryItem				=	require('../factory/FactoryItem.js');
 
-	var Scene = function(config) {
+	var Scene = function(config, level) {
 		this.items = {};
 		this.avatars = {};
 		this.monsters = {};
 		this.projectiles = {};
 		this.projectilesToCleanNextStep = [];
 		this.attackZones = {};
-		this.name = config.name;
-		this.width = config.width;
-		this.height = config.height;
-		this.blocks = config.blocks;
+
+		this.name = level.name;
+		this.width = level.width;
+		this.height = level.height;
+		this.blocks = level.blocks;
+
 		this.maxInstance = config.maxInstance;
 		this.minDeltaSaveElement = config.minDeltaSaveElement;
 		this.maxUser = config.maxUser;
