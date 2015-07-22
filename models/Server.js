@@ -13,7 +13,8 @@
 var _                   =   require('underscore');
 var http                =   require('http');
 var colors              =   require('colors');
-var WebSocketServer     =   require('websocket').server;
+var socketio            =   require('socket.io');
+// var WebSocketServer     =   require('websocket').server;
 var util                =   require('util');
 var events              =   require('events');
 var crypto              =   require('crypto');
@@ -54,21 +55,19 @@ var Server = function() {
 	this.httpServer = http.createServer();
 
 	// add websocket componant to httpserver
-	this.wsServer = new WebSocketServer({
-		httpServer: this.httpServer
-	});
+	this.wsServer = socketio(this.httpServer);
+	MessageHandler.setWebsocketServer(this.wsServer);
 
 	/**
 	 * Manage websocket event
 	 **/
-	this.wsServer.on('request', function(request) {
+	this.wsServer.on('connection', function(socket) {
 
 		//for now alltime accept connections
-		var connection = request.accept(null, request.origin);
-		Log.info('Connection'.yellow + ' from ' + connection.remoteAddress + ' with protocol version ' + connection.webSocketVersion);
+		Log.info('Connection'.yellow + ' from ' + socket.handshake.address);
 
 		//handle message
-		connection.on('message', function(message) {
+		socket.on('message', function(message) {
 			if (message.type === 'utf8') {
 				try {
 					var messageParsed = JSON.parse(message.utf8Data);
@@ -77,40 +76,37 @@ var Server = function() {
 					 * */
 					if(messageParsed[_t.TRACE_ID] === undefined) {
 						Log.error('no trace id');
-						MessageHandler.sendErrorMessage(connection,'unauthorized') ;
+						MessageHandler.sendErrorMessage(socket,'unauthorized') ;
 						return ;
 					}
 
-					 //PAS SECURE !!! On ne check pas si la session existe!!
+					//PAS SECURE !!! On ne check pas si la session existe!!
 					if( messageParsed[_t.SESSION_ID] === undefined && 
 						messageParsed[_t.ACTION] !== 'login' ) {
 						Log.error('no session id and no auth action');
-						MessageHandler.sendErrorMessage(connection,'unauthorized') ;
+						MessageHandler.sendErrorMessage(socket,'unauthorized') ;
 						return ;
 					}
 
-					//Load action
-					if(ActionHandle.isAuthorized(connection)) {
-						connection.currentTraceId = messageParsed[_t.TRACE_ID];
-						ActionHandler.load(connection,messageParsed) ;
-					}
+					socket.currentTraceId = messageParsed[_t.TRACE_ID];
+					ActionHandler.load(socket,messageParsed) ;
 
 				} catch (err) {
 					Log.error(err +' '+ err.messageParsed);
 					throw err ;
 				}
 			} else {
-				MessageHandler.sendErrorMessage(connection,'Server message type is not UTF8') ;
+				MessageHandler.sendErrorMessage(socket,'Server message type is unreadable') ;
 			}
 		});
 
 		//note : errors trigg close event too
-		connection.on('close', function(reason,description) {
+		socket.on('disconnect', function(reason,description) {
 			// delete session
-			if(connection.sessionid !== undefined) {
-				this.removeSession(connection);
+			if(socket.sessionid !== undefined) {
+				this.removeSession(socket);
 			}
-			Log.info(connection.remoteAddress + " disconnected.".yellow + ', reason : ' + description);
+			Log.info(socket.handshake.address + " disconnected.".yellow + ', reason : ' + description);
 		}.bind(this));
 
 	}.bind(this));

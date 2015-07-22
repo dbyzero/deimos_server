@@ -8,16 +8,17 @@
  * */
 
 var MessageHandler = {} ;
+MessageHandler.websocketServer = null;
 
-//Error message
-MessageHandler.sendMessage = function(connection,message) {
-	//NEDDED ? => NO we are on TCP/IP
-	//message['lastTraceReceived'] = connection.currentTraceId;
-	message[GLOBAL._t.DATE] = new Date().getTime();
-	connection.sendUTF(JSON.stringify(message));
+MessageHandler.setWebsocketServer = function(wsServer) {
+	MessageHandler.websocketServer = wsServer;
 };
 
-//Error message
+MessageHandler.sendMessagesendMessage = function(connection,message) {
+	message[GLOBAL._t.DATE] = new Date().getTime();
+	connection.emit('message',JSON.stringify(message));
+};
+
 MessageHandler.sendErrorMessage = function(connection,message) {
 	var msg = {};
 	msg[GLOBAL._t.ACTION] = GLOBAL._t.ACTION_ERROR;
@@ -27,10 +28,7 @@ MessageHandler.sendErrorMessage = function(connection,message) {
 
 
 MessageHandler.sendMessageToAll = function(message) {
-	var connections = GLOBAL.server.connections;
-	for(key in connections) {
-		MessageHandler.sendMessage(connections[key], message);
-	}
+	MessageHandler.websocketServer.emit(message);
 };
 
 
