@@ -14,21 +14,21 @@ MessageHandler.setWebsocketServer = function(wsServer) {
 	MessageHandler.websocketServer = wsServer;
 };
 
-MessageHandler.sendMessagesendMessage = function(connection,message) {
-	message[GLOBAL._t.DATE] = new Date().getTime();
-	connection.emit('message',JSON.stringify(message));
+MessageHandler.sendMessage = function(connection, type, data) {
+	data[GLOBAL._t.DATE] = new Date().getTime();
+	connection.emit(type,JSON.stringify(data));
 };
 
-MessageHandler.sendErrorMessage = function(connection,message) {
-	var msg = {};
-	msg[GLOBAL._t.ACTION] = GLOBAL._t.ACTION_ERROR;
-	msg[GLOBAL._t.MESSAGE] = message;
-	MessageHandler.sendMessage(connection,msg);
+MessageHandler.sendErrorMessage = function(connection, data) {
+	// var msg = {};
+	// msg[GLOBAL._t.ACTION] = GLOBAL._t.ACTION_ERROR;
+	// msg[GLOBAL._t.MESSAGE] = message;
+	MessageHandler.sendMessage(connection, GLOBAL._t.ACTION_ERROR, data);
 };
 
 
-MessageHandler.sendMessageToAll = function(message) {
-	MessageHandler.websocketServer.emit(message);
+MessageHandler.sendMessageToAll = function(type, data) {
+	MessageHandler.websocketServer.emit(type, data);
 };
 
 
@@ -36,7 +36,7 @@ MessageHandler.CODE = {
 	"text":{
 		"DATE":"d",
 		"ID":"i",
-		"ACTION":"t",
+		// "ACTION":"t",
 		"ACTION_ERROR":"e",
 		"ACTION_LOGGED_OK":"o",
 		"ACTION_LOGGED_NOK":"n",
@@ -56,7 +56,7 @@ MessageHandler.CODE = {
 		"ACTION_COLLIDE":"@",
 		"ACTION_ITEM_GRABBED":"á",
 		"ACTION_SYNC_ATTACK_ZONE":"è",
-		"MESSAGE":"m",
+		// "MESSAGE":"m",
 		"MESSAGE_MOVE_ID":"9",
 		"MESSAGE_MOVE_TYPE":"7",
 		"MESSAGE_MOVE_START":"f",
@@ -140,7 +140,7 @@ MessageHandler.CODE = {
 	"verbose":{
 		"DATE":"date",
 		"ID":"id",
-		"ACTION":"action",
+		// "ACTION":"action",
 		"ACTION_ERROR":"error",
 		"ACTION_LOGGED_OK":"login_ok",
 		"ACTION_LOGGED_NOK":"loggued_nok",
@@ -160,7 +160,7 @@ MessageHandler.CODE = {
 		"ACTION_COLLIDE":"action_collide",
 		"ACTION_ITEM_GRABBED":"item_grabbed",
 		"ACTION_SYNC_ATTACK_ZONE":"attack_zone",
-		"MESSAGE":"message",
+		// "MESSAGE":"message",
 		"MESSAGE_MOVE_ID":"move_id",
 		"MESSAGE_MOVE_TYPE":"move_type",
 		"MESSAGE_MOVE_START":"move_start",

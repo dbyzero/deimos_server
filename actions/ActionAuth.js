@@ -75,9 +75,8 @@ processLoginSuccess = function(sessionid, result, connection) {
 
 	//specify to connection we are logged and send avatar list
 	var responce = {};
-	responce[GLOBAL._t['ACTION']] = GLOBAL._t['ACTION_LOGGED_OK'];
-	responce[GLOBAL._t['MESSAGE']] = {};
-	responce[GLOBAL._t['MESSAGE']][GLOBAL._t['SESSION_ID']] = sessionid;
+	// responce[GLOBAL._t['ACTION']] = GLOBAL._t['ACTION_LOGGED_OK'];
+	responce[GLOBAL._t['SESSION_ID']] = sessionid;
 
 	GLOBAL.server.API.get('/avatar/byowner/'+login, function(err, req, res, obj) {
 		if(err !== null) {
@@ -98,18 +97,18 @@ processLoginSuccess = function(sessionid, result, connection) {
 			avatar[GLOBAL._t["MESSAGE_ACCELERATION"]] = cur_avatar.acceleration
 			avatars.push(avatar);
 		}
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['AVATARS']] = avatars;
+		responce[GLOBAL._t['AVATARS']] = avatars;
 
 		//adding info game zone
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_NAME']] = GLOBAL.server.scene.name;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_DOM_ID']] = GLOBAL.server.scene.domId;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_WIDTH']] = GLOBAL.server.scene.width;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_HEIGHT']] = GLOBAL.server.scene.height;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_AREA_BLOCKS']] = GLOBAL.server.scene.blocks;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_MAX_INSTANCE']] = GLOBAL.server.scene.maxInstance;
-		responce[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_GAME_MAX_USER']] = GLOBAL.server.scene.maxUser;
+		responce[GLOBAL._t['MESSAGE_GAME_AREA_NAME']] = GLOBAL.server.scene.name;
+		responce[GLOBAL._t['MESSAGE_GAME_AREA_DOM_ID']] = GLOBAL.server.scene.domId;
+		responce[GLOBAL._t['MESSAGE_GAME_AREA_WIDTH']] = GLOBAL.server.scene.width;
+		responce[GLOBAL._t['MESSAGE_GAME_AREA_HEIGHT']] = GLOBAL.server.scene.height;
+		responce[GLOBAL._t['MESSAGE_GAME_AREA_BLOCKS']] = GLOBAL.server.scene.blocks;
+		responce[GLOBAL._t['MESSAGE_GAME_MAX_INSTANCE']] = GLOBAL.server.scene.maxInstance;
+		responce[GLOBAL._t['MESSAGE_GAME_MAX_USER']] = GLOBAL.server.scene.maxUser;
 
-		MessageHandler.sendMessage(connection,responce);
+		MessageHandler.sendMessage(connection, GLOBAL._t['ACTION_LOGGED_OK'], responce);
 	});
 }
 

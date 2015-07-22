@@ -28,10 +28,10 @@ ActionGetItemTemplate.prototype = {
 		FactoryItem.getById(action[_t['MESSAGE']][_t['MESSAGE_ITEM_ID']],null)
 			.then(function(item) {
 				var itemTemplateToSync = ItemTemplateHandler.cleanToSync(item);
-				var message = {};
-				message[_t.ACTION] = _t.ACTION_GET_ITEM_TEMPLATE
-				message[_t.MESSAGE] = itemTemplateToSync;
-				MessageHandler.sendMessage(connection,message);
+				// var message = {};
+				// message[_t.ACTION] = _t.ACTION_GET_ITEM_TEMPLATE
+				// message[_t.MESSAGE] = itemTemplateToSync;
+				MessageHandler.sendMessage(connection, _t.ACTION_GET_ITEM_TEMPLATE, itemTemplateToSync);
 			});
 	}
 }

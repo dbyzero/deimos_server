@@ -53,10 +53,10 @@
 
 	AttackZone.prototype.syncToAllClient = function(e) {
 		var _t = GLOBAL._t;
-		var message = {};
-		message[_t['ACTION']] = _t['ACTION_SYNC_ATTACK_ZONE'];
-		message[_t['MESSAGE']] = this.getCleanData();
-		MessageHandler.sendMessageToAll(message);
+		// var message = {};
+		// message[_t['ACTION']] = _t['ACTION_SYNC_ATTACK_ZONE'];
+		// message[_t['MESSAGE']] = this.getCleanData();
+		MessageHandler.sendMessageToAll(_t['ACTION_SYNC_ATTACK_ZONE'],this.getCleanData());
 	}
 
 	//return the Monster class

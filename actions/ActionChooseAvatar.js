@@ -53,13 +53,12 @@ ActionChooseAvatar.prototype = {
 						.then(function(newAvatar){
 							avatar = newAvatar;
 
+							// message[_t.ACTION] = _t.ACTION_CHOOSE_CHAR_OK;
 							var message = {};
-							message[_t.ACTION] = _t.ACTION_CHOOSE_CHAR_OK;
-							message[_t.MESSAGE] = {};
-							message[_t.MESSAGE][_t.ACTION_SYNC] = server.scene.getCleanData(new Date().getTime());
-							message[_t.MESSAGE][_t.MESSAGE_CHAR] = avatar.getCleanData();
+							message[_t.ACTION_SYNC] = server.scene.getCleanData(new Date().getTime());
+							message[_t.MESSAGE_CHAR] = avatar.getCleanData();
 
-							MessageHandler.sendMessage(connection, message);
+							MessageHandler.sendMessage(connection, ACTION_CHOOSE_CHAR_OK, message);
 							GLOBAL.server.scene.addAvatar(connection.sessionid,avatar);
 						},function(err){
 							throw err;

@@ -63,22 +63,22 @@
 
 	Item.prototype.syncToAllClient = function(e) {
 		var _t = GLOBAL._t;
-		var message = {};
-		message[_t['ACTION']] = _t['ACTION_SYNC_ITEM'];
-		message[_t['MESSAGE']] = this.getCleanData();
-		MessageHandler.sendMessageToAll(message);
+		// var message = {};
+		// message[_t['ACTION']] = _t['ACTION_SYNC_ITEM'];
+		// message[_t['MESSAGE']] = this.getCleanData();
+		MessageHandler.sendMessageToAll(_t['ACTION_SYNC_ITEM'],this.getCleanData());
 	}
 
 	Item.prototype.grabbed = function(grabber) {
 		if(grabber.addItem(this)) {
 			var _t = GLOBAL._t;
 			var message = {};
-			message[_t.ACTION] = _t.ACTION_ITEM_GRABBED;
-			message[_t.MESSAGE] = {}
-			message[_t.MESSAGE][_t['MESSAGE_ITEM']]				= this.id;
-			message[_t.MESSAGE][_t['MESSAGE_TO']]				= grabber.id;
-			message[_t.MESSAGE][_t['MESSAGE_TO_POSITION']]		= grabber.position;
-			MessageHandler.sendMessageToAll(message);
+			message[_t['MESSAGE_ITEM']]				= this.id;
+			message[_t['MESSAGE_TO']]				= grabber.id;
+			message[_t['MESSAGE_TO_POSITION']]		= grabber.position;
+			// message[_t.ACTION] = _t.ACTION_ITEM_GRABBED;
+			// message = {}
+			MessageHandler.sendMessageToAll(_t.ACTION_ITEM_GRABBED, message);
 			this.destroy();
 		}
 	}

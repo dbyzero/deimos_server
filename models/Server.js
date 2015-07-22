@@ -168,10 +168,7 @@ Server.prototype.start = function() {
 			this.emit('STARTED',this);
 		}.bind(this)
 	);
-	
-
 };
-
 
 Server.prototype.update = function() {
 	//we want precise integration, so we use spend time (not approximative loop time)
@@ -194,10 +191,10 @@ Server.prototype.update = function() {
 
 Server.prototype.syncScene = function() {
 	var now = new Date().getTime();
-	var message = {};
-	message[_t.ACTION] = _t.ACTION_SYNC;
-	message[_t.MESSAGE] = this.scene.getCleanData(now);
-	MessageHandler.sendMessageToAll(message);
+	// var message = {};
+	// message[_t.ACTION] = _t.ACTION_SYNC;
+	// message[_t.MESSAGE] = this.scene.getCleanData(now);
+	MessageHandler.sendMessageToAll(_t.ACTION_SYNC, this.scene.getCleanData(now));
 	this.needSync = false;
 	this.lastSync = now;
 	this.lastAliveSync = now;

@@ -661,24 +661,24 @@ Element.prototype.damaged = function(collisionElement) {
 	this.currentHP -= collisionElement.damage;
 	var _t = GLOBAL._t;
 	var message = {};
-	message[_t.ACTION] = _t.ACTION_COLLIDE;
-	message[_t.MESSAGE] = {}
-	message[_t.MESSAGE][_t['MESSAGE_FROM']]			 =	collisionElement.id;
-	message[_t.MESSAGE][_t['MESSAGE_FROM_TYPE']]	 =	collisionElement.type;
-	message[_t.MESSAGE][_t['MESSAGE_FROM_POSITION']] =	collisionElement.position;
-	message[_t.MESSAGE][_t['MESSAGE_TO']]			 =	this.id;
-	message[_t.MESSAGE][_t['MESSAGE_TO_TYPE']] 		 =	this.type;
-	message[_t.MESSAGE][_t['MESSAGE_TO_POSITION']]	 =	this.position;
-	message[_t.MESSAGE][_t['MESSAGE_LANDED']] 		 =	this.isLanded;
+	// message[_t.ACTION] = _t.ACTION_COLLIDE;
+	// message = {}
+	message[_t['MESSAGE_FROM']]			 =	collisionElement.id;
+	message[_t['MESSAGE_FROM_TYPE']]	 =	collisionElement.type;
+	message[_t['MESSAGE_FROM_POSITION']] =	collisionElement.position;
+	message[_t['MESSAGE_TO']]			 =	this.id;
+	message[_t['MESSAGE_TO_TYPE']] 		 =	this.type;
+	message[_t['MESSAGE_TO_POSITION']]	 =	this.position;
+	message[_t['MESSAGE_LANDED']] 		 =	this.isLanded;
 	//synchro death
 	if(this.currentHP <= 0) {
-		message[_t.MESSAGE][_t['MESSAGE_IS_DEAD']] =	true;
+		message[_t['MESSAGE_IS_DEAD']] =	true;
 		this.die();
 	//or synchro lost HP
 	} else {
-		message[_t.MESSAGE][_t['MESSAGE_IS_DEAD']] =	false;
+		message[_t['MESSAGE_IS_DEAD']] =	false;
 	}
-	MessageHandler.sendMessageToAll(message);
+	MessageHandler.sendMessageToAll(_t.ACTION_COLLIDE, message);
 	console.log(this.name+' lost '+collisionElement.damage+' hp! current hp : ('+this.currentHP+'/'+this.hp+')');
 }
 
