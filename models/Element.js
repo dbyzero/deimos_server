@@ -40,6 +40,7 @@ var Element = function(data) {
 	this.attackProcess	= {type:'default'};
 	this.attackRate		= 100; // = 100ms
 	this.lastAttack		= null;
+	this.currentAction	= 'standing';
 
 	 //translation from entity origine to apply to a proejectile
 	this.projectileTranslation	= {
@@ -211,6 +212,9 @@ Element.prototype.move = function() {
 		}
 	}
 	this.toMove = Vector2.getNullVector();
+	// console.log('===========');
+	// console.log(this.position.x + 'x' + this.position.y);
+	// console.log('===========');
 }
 
 Element.prototype.checkBlocksCollision = function( currentMovement ) {

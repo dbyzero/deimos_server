@@ -33,23 +33,25 @@ ActionJump.prototype = {
 		var avatar = GLOBAL.server.scene.avatars[avatar_hash];
 		if(avatar === null) return;
 
-		var force = new Vector2( 0, -1 * parseInt(avatar.jump_speed));
-		var forceToApply = {
-			"vector":force,
-			"time":parseInt(action[_t['MESSAGE']][_t['MESSAGE_MOVE_START']]) + parseInt(connection.delta_time)
-		}
-		avatar.addForceNextStep(forceToApply);
+		// var force = new Vector2( 0, -1 * parseInt(avatar.jump_speed));
+		// var forceToApply = {
+		// 	"vector":force,
+		// 	"time":parseInt(action[_t['MESSAGE_MOVE_START']]) + parseInt(connection.delta_time)
+		// }
+		// avatar.addForceNextStep(forceToApply);
 
-		var newAction = {
-			'position':action[_t['MESSAGE']][_t['MESSAGE_POSITION']],
-			'type':'jump',
-			'force':force,
-			'time':new Date().getTime()
-		};
+		avatar.velocity.y -= parseInt(avatar.jump_speed);
+
+		// var newAction = {
+		// 	'position':action[_t['MESSAGE_POSITION']],
+		// 	'type':'jump',
+		// 	'force':force,
+		// 	'time':new Date().getTime()
+		// };
 		//todo ? forcer le point de depart sur le client !
 
-		avatar.clientPosition.x = action[_t['MESSAGE']][_t['MESSAGE_POSITION']].x;
-		avatar.clientPosition.y = action[_t['MESSAGE']][_t['MESSAGE_POSITION']].y;
+		avatar.clientPosition.x = action[_t['MESSAGE_POSITION']].x;
+		avatar.clientPosition.y = action[_t['MESSAGE_POSITION']].y;
 		avatar.fixPositionWithClient(action.position);
 
 		avatar.unlanded();

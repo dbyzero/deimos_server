@@ -39,7 +39,7 @@ ActionChooseAvatar.prototype = {
 				var granted = false;
 				var synchedAvatar = null;
 				for(key in avatars){
-					if(avatars[key].id === parseInt(e[_t.MESSAGE][_t.MESSAGE_CHAR])) {
+					if(avatars[key].id === parseInt(e[_t.MESSAGE_CHAR])) {
 						granted = true;
 						synchedAvatar = avatars[key];
 						break
@@ -49,17 +49,26 @@ ActionChooseAvatar.prototype = {
 					Log.info('Account '+sessionData.account.toString().yellow+' on session '+connection.sessionid+' use avatar '+synchedAvatar.name.toString().yellow+'('+synchedAvatar.id.toString().yellow+')');
 					
 					var avatar = null;
-					FactoryAvatar.getById(parseInt(e[_t.MESSAGE][_t.MESSAGE_CHAR]))
+					FactoryAvatar.getById(parseInt(e[_t.MESSAGE_CHAR]))
 						.then(function(newAvatar){
 							avatar = newAvatar;
 
 							// message[_t.ACTION] = _t.ACTION_CHOOSE_CHAR_OK;
 							var message = {};
-							message[_t.ACTION_SYNC] = server.scene.getCleanData(new Date().getTime());
 							message[_t.MESSAGE_CHAR] = avatar.getCleanData();
 
-							MessageHandler.sendMessage(connection, ACTION_CHOOSE_CHAR_OK, message);
+							//adding info game zone
+							message[_t['MESSAGE_GAME_AREA_NAME']] = GLOBAL.server.scene.name;
+							message[_t['MESSAGE_GAME_AREA_DOM_ID']] = GLOBAL.server.scene.domId;
+							message[_t['MESSAGE_GAME_AREA_WIDTH']] = GLOBAL.server.scene.width;
+							message[_t['MESSAGE_GAME_AREA_HEIGHT']] = GLOBAL.server.scene.height;
+							message[_t['MESSAGE_GAME_AREA_BLOCKS']] = GLOBAL.server.scene.blocks;
+							message[_t['MESSAGE_GAME_MAX_INSTANCE']] = GLOBAL.server.scene.maxInstance;
+							message[_t['MESSAGE_GAME_MAX_USER']] = GLOBAL.server.scene.maxUser;
 							GLOBAL.server.scene.addAvatar(connection.sessionid,avatar);
+
+							message[_t.ACTION_SYNC] = server.scene.getCleanData(new Date().getTime());
+							MessageHandler.sendMessage(connection, _t.ACTION_CHOOSE_CHAR_OK, message);
 						},function(err){
 							throw err;
 						})

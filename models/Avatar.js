@@ -52,8 +52,9 @@
 		this.clientPosition		= Vector2.getNullVector();
 		this.sessionDeltaTime	= 0;
 		this.clientIsAuthorithy	= false;
-		this.waitingForce		= []; //forces to add next update
+		// this.waitingForce		= []; //forces to add next update
 		this.userInputs			= {}; //current user inputs
+		this.userActions		= []; //current user inputs
 		this.saying				= "" ;
 		this.type				= GLOBAL._t.MESSAGE_AVATAR;
 
@@ -86,20 +87,20 @@
 	};
 
 	//adding force next step
-	Avatar.prototype.addForceNextStep = function(force) {
-		this.waitingForce.push(force) ;
-	};
+	// Avatar.prototype.addForceNextStep = function(force) {
+	// 	this.waitingForce.push(force) ;
+	// };
 
 	//mergin waiting forces
-	Avatar.prototype.manageWaitingForces = function(now) {
-		for(force in this.waitingForce) {
-			if(force.time > now) continue;
-			var daForce = this.waitingForce[force];
-			this.waitingForce.splice(this.waitingForce.indexOf(force),1);
-			this.velocity.x = this.velocity.x + daForce.vector.x;
-			this.velocity.y = this.velocity.y + daForce.vector.y;
-		}
-	};
+	// Avatar.prototype.manageWaitingForces = function(now) {
+	// 	for(force in this.waitingForce) {
+	// 		if(force.time > now) continue;
+	// 		var daForce = this.waitingForce[force];
+	// 		this.waitingForce.splice(this.waitingForce.indexOf(force),1);
+	// 		this.velocity.x = this.velocity.x + daForce.vector.x;
+	// 		this.velocity.y = this.velocity.y + daForce.vector.y;
+	// 	}
+	// };
 
 	Avatar.prototype.update = function(dt, now) {
 
@@ -154,14 +155,37 @@
 		movement.x = parseFloat(movement.x);
 		movement.y = parseFloat(movement.y);
 		this.toMove.add(movement);
+
+			if( this.orientation === 'left' ) {
+		if(this.serverPosition.x < this.position.x) {
+			//the Math.min is used to not go through the server position
+			this.toMove.x = -1 * Math.min(
+				(this.move_speed * dt/1000),
+				(this.position.x - this.serverPosition.x)
+			);
+		}
+		if(this.serverPosition.x > this.position.x) {
+			this.toMove.x = 0;
+		}
+	}
+	if( this.orientation === 'right' ) {
+		if(this.serverPosition.x > this.position.x) {
+			//the Math.min is used to not go through the server position
+			this.toMove.x = Math.min(
+				(this.move_speed * dt/1000),
+				(this.serverPosition.x - this.position.x)
+			);
+		}
+		if(this.serverPosition.x < this.position.x) {
+			console.log('stop it');
+			this.toMove.x = 0;
+		}
+	}
 	};
 
 
 	Avatar.prototype.syncToAllClient = function(e) {
 		var _t = GLOBAL._t;
-		// var message = {};
-		// message[_t['ACTION']] = _t['ACTION_SYNC_AVATAR'];
-		// message[_t['MESSAGE']] = this.getCleanData();
 		MessageHandler.sendMessageToAll(_t['ACTION_SYNC_AVATAR'],this.getCleanData());
 	}
 
@@ -183,35 +207,46 @@
 		var date = new Date().getTime();
 
 		//adding user action through keyboard to the movement
-		var inputUserVelocity = {'x':0,'y':0};
-		for(id in this.userInputs) {
-			//we dont sync inputUser stopping
-			var input = this.userInputs[id];
-			if(input.duration !== null) continue;
-			inputUserVelocity.x += input.movement.x;
-			inputUserVelocity.y += input.movement.y;
-		}
-		var sumWaitingForce = new Vector2(0,0);
-		for(id in this.waitingForce) {
-			var force = this.waitingForce[id]
-			sumWaitingForce.add(force.vector);
-		}
+		// for(id in this.userInputs) {
+		// 	//we dont sync inputUser stopping
+		// 	var inputUser = this.userInputs[id];
+		// 	var input = {};
+
+		// 	if(inputUser.duration !== null) continue;
+		// 	input.i = input.id;
+		// 	input.m = { 
+		// 		'x' :inputUser.movement ? inputUser.movement.x : 0,
+		// 		'y' :inputUser.movement ? inputUser.movement.y : 0
+		// 	};
+		// 	input.t = inputUser.startTimestamp;
+		// 	input.s = inputUser.durationIntegrated;
+		// 	input.d = inputUser.duration;
+		// 	input.id = inputUser.movement.id
+		// 	input.t = inputUser.type;
+		// 	inputUserVelocity.push(input);
+		// }
+
+		// var sumWaitingForce = new Vector2(0,0);
+		// for(id in this.waitingForce) {
+		// 	var force = this.waitingForce[id]
+		// 	sumWaitingForce.add(force.vector);
+		// }
 		var data = {};
 		data = {};
 		data[_t['NAME']] = this.name;
-		data[_t['MESSAGE_ELEMENT_ID']] = this.id;
+		data[_t['ID']] = this.id;
 		data[_t['MESSAGE_GOING_DOWN']] = this.goingDown;
 		data[_t['MESSAGE_POSITION']] = {};
 		data[_t['MESSAGE_POSITION']].x = parseInt(this.position.x);
 		data[_t['MESSAGE_POSITION']].y = parseInt(this.position.y);
 		data[_t['MESSAGE_VELOCITY']] = {};
-		data[_t['MESSAGE_VELOCITY']].x = (parseInt(this.velocity.x) + parseInt(sumWaitingForce.x));
-		data[_t['MESSAGE_VELOCITY']].y = (parseInt(this.velocity.y) + parseInt(sumWaitingForce.y));
+		data[_t['MESSAGE_VELOCITY']].x = (parseInt(this.velocity.x)/* + parseInt(sumWaitingForce.x)*/);
+		data[_t['MESSAGE_VELOCITY']].y = (parseInt(this.velocity.y)/* + parseInt(sumWaitingForce.y)*/);
 		data[_t['MESSAGE_ACCELERATION']] = {};
 		data[_t['MESSAGE_ACCELERATION']].x = this.acceleration.x;
 		data[_t['MESSAGE_ACCELERATION']].y = this.acceleration.y;
 		data[_t['MESSAGE_SAYING']] = this.saying || '';
-		data[_t['MESSAGE_USER_INPUT_VELOCITY']] = inputUserVelocity;
+		data[_t['MESSAGE_USER_INPUT']] = this.userActions;
 		data[_t['MESSAGE_SIZE']] = this.size;
 		data[_t['MESSAGE_JUMP_SPEED']] = this.jump_speed;
 		data[_t['MESSAGE_MOVE_SPEED']] = this.move_speed;
@@ -237,7 +272,7 @@
 		var deltaX = this.clientPosition.x - parseInt(this.position.x);
 		var deltaY = this.clientPosition.y - parseInt(this.position.y);
 		var squareHypothenus = deltaX*deltaX + deltaY*deltaY;
-		if(Config.Client.SQUARE_AUTHORITY_DISTANCE > squareHypothenus) {
+		if( squareHypothenus < Config.Client.SQUARE_AUTHORITY_DISTANCE ) {
 			this.position.x = this.clientPosition.x;
 			this.position.y = this.clientPosition.y;
 			this.onMove();

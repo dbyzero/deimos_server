@@ -117,7 +117,7 @@
 			avatar = this.avatars[keys[i]];
 			avatar.move();
 			avatar.adaptAnimation();
-			avatar.manageWaitingForces(now);
+			// avatar.manageWaitingForces(now);
 		}
 		keys = Object.keys(this.items);
 		for(i=0;i<keys.length;i++) {

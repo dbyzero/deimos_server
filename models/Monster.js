@@ -29,6 +29,8 @@
 		this.hp			= data.hp;
 		this.currentHP	= data.hp;
 		this.attackRate	= 500;
+		this.move_speed = 42;
+		this.jump_speed = 500;
 		this.type		= "monster";
 	}
 	util.inherits(Monster, Element);
@@ -65,11 +67,13 @@
 		data[_t['MESSAGE_ORIENTATION']]		= this.oriented;
 		data[_t['MESSAGE_CURRENT_HP']]		= this.currentHP;
 		data[_t['MESSAGE_HP']]				= this.hp;
+		data[_t['MESSAGE_MOVE_SPEED']]		= this.move_speed;
+		data[_t['MESSAGE_JUMP_SPEED']]		= this.jump_speed;
 		return data;
 	}
 
 	Monster.prototype.update = function(dt, now) {
-		if(this.isLanded && parseInt(Math.random()*2) === 1) {
+		if(this.isLanded && parseInt(Math.random()*100) === 1) {
 			this.velocity.y = -300-parseInt(Math.random()*700);
 			this.syncToAllClient();
 		}
@@ -112,15 +116,16 @@
 	}
 
 	Monster.prototype.onBlockCollisionLeftRight = function() {
-		this.velocity.x = -1*parseInt(this.velocity.x);
+		if(this.velocity.x > 0) {
+			this.oriented = 'left';
+		} else {
+			this.oriented = 'right';
+		}
 	}
 
 
 	Monster.prototype.syncToAllClient = function(e) {
 		var _t = GLOBAL._t;
-		// var message = {};
-		// message[_t['ACTION']] = _t['ACTION_SYNC_MONSTER'];
-		// message[_t['MESSAGE']] = this.getCleanData();
 		MessageHandler.sendMessageToAll(_t['ACTION_SYNC_MONSTER'], this.getCleanData());
 	}
 

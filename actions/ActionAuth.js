@@ -24,6 +24,14 @@ var ActionAuth = function(){
  */
 ActionAuth.prototype = { 
 	load : function(connection,e) {
+		if(!e[GLOBAL._t['MESSAGE']]) {
+			console.log('No message provided')
+			return;
+		}
+		if(!e[GLOBAL._t['MESSAGE']][GLOBAL._t['LOGIN']]) {
+			console.log('No login provided')
+			return;
+		}
 		var login = e[GLOBAL._t['MESSAGE']][GLOBAL._t['LOGIN']];
 		var password = e[GLOBAL._t['MESSAGE']][GLOBAL._t['PASSWORD']];
 		var current_url = e[GLOBAL._t['MESSAGE']][GLOBAL._t['MESSAGE_CURRENT_URL']];
@@ -46,6 +54,15 @@ ActionAuth.prototype = {
 	},
 
 	loadByToken : function(connection,e) {
+		if(!e) {
+			console.log('No message provided')
+			return;
+		}
+		if(!e[GLOBAL._t['SESSION_ID']]) {
+			console.log('No session id provided')
+			return;
+		}
+
 		var sessionid = e[GLOBAL._t['SESSION_ID']];
 
 		if(!(_.isString(sessionid))) {
@@ -98,16 +115,6 @@ processLoginSuccess = function(sessionid, result, connection) {
 			avatars.push(avatar);
 		}
 		responce[GLOBAL._t['AVATARS']] = avatars;
-
-		//adding info game zone
-		responce[GLOBAL._t['MESSAGE_GAME_AREA_NAME']] = GLOBAL.server.scene.name;
-		responce[GLOBAL._t['MESSAGE_GAME_AREA_DOM_ID']] = GLOBAL.server.scene.domId;
-		responce[GLOBAL._t['MESSAGE_GAME_AREA_WIDTH']] = GLOBAL.server.scene.width;
-		responce[GLOBAL._t['MESSAGE_GAME_AREA_HEIGHT']] = GLOBAL.server.scene.height;
-		responce[GLOBAL._t['MESSAGE_GAME_AREA_BLOCKS']] = GLOBAL.server.scene.blocks;
-		responce[GLOBAL._t['MESSAGE_GAME_MAX_INSTANCE']] = GLOBAL.server.scene.maxInstance;
-		responce[GLOBAL._t['MESSAGE_GAME_MAX_USER']] = GLOBAL.server.scene.maxUser;
-
 		MessageHandler.sendMessage(connection, GLOBAL._t['ACTION_LOGGED_OK'], responce);
 	});
 }

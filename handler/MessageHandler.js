@@ -1,3 +1,5 @@
+var Log = require('../utils/Log').Instance();
+
 /**
  *
  * MessageHandler class
@@ -17,6 +19,8 @@ MessageHandler.setWebsocketServer = function(wsServer) {
 MessageHandler.sendMessage = function(connection, type, data) {
 	data[GLOBAL._t.DATE] = new Date().getTime();
 	connection.emit(type,JSON.stringify(data));
+	// Log.info(type);
+	// Log.info(data);
 };
 
 MessageHandler.sendErrorMessage = function(connection, data) {
@@ -64,7 +68,7 @@ MessageHandler.CODE = {
 		"MESSAGE_CHARNAME":"_",
 		"MESSAGE_POSITION":"p",
 		"MESSAGE_VELOCITY":"v",
-		"MESSAGE_USER_INPUT_VELOCITY":"y",
+		"MESSAGE_USER_INPUT":"y",
 		"MESSAGE_ACCELERATION":"z",
 		"MESSAGE_SIZE":"/",
 		"MESSAGE_SKIN":"~",
@@ -141,7 +145,7 @@ MessageHandler.CODE = {
 		"DATE":"date",
 		"ID":"id",
 		// "ACTION":"action",
-		"ACTION_ERROR":"error",
+		"ACTION_ERROR":"appError",
 		"ACTION_LOGGED_OK":"login_ok",
 		"ACTION_LOGGED_NOK":"loggued_nok",
 		"ACTION_SYNC":"sync",
@@ -168,7 +172,7 @@ MessageHandler.CODE = {
 		"MESSAGE_CHARNAME":"character_name",
 		"MESSAGE_POSITION":"position",
 		"MESSAGE_VELOCITY":"velocity",
-		"MESSAGE_USER_INPUT_VELOCITY":"user_input_velocity",
+		"MESSAGE_USER_INPUT":"user_input",
 		"MESSAGE_ACCELERATION":"acceleration",
 		"MESSAGE_SPEAK":"speak",
 		"MESSAGE_SIZE":"size",

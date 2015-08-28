@@ -66,47 +66,16 @@ var Server = function() {
 		//for now alltime accept connections
 		Log.info('Connection'.yellow + ' from ' + socket.handshake.address);
 
-		//handle message
-		socket.on('message', function(message) {
-			if (message.type === 'utf8') {
-				try {
-					var messageParsed = JSON.parse(message.utf8Data);
-					/**
-					 * Lot of sanity check
-					 * */
-					if(messageParsed[_t.TRACE_ID] === undefined) {
-						Log.error('no trace id');
-						MessageHandler.sendErrorMessage(socket,'unauthorized') ;
-						return ;
-					}
-
-					//PAS SECURE !!! On ne check pas si la session existe!!
-					if( messageParsed[_t.SESSION_ID] === undefined && 
-						messageParsed[_t.ACTION] !== 'login' ) {
-						Log.error('no session id and no auth action');
-						MessageHandler.sendErrorMessage(socket,'unauthorized') ;
-						return ;
-					}
-
-					socket.currentTraceId = messageParsed[_t.TRACE_ID];
-					ActionHandler.load(socket,messageParsed) ;
-
-				} catch (err) {
-					Log.error(err +' '+ err.messageParsed);
-					throw err ;
-				}
-			} else {
-				MessageHandler.sendErrorMessage(socket,'Server message type is unreadable') ;
-			}
-		});
+		//bind action to socket
+		ActionHandle.bind(socket);
 
 		//note : errors trigg close event too
-		socket.on('disconnect', function(reason,description) {
+		socket.on('disconnect', function(reason) {
 			// delete session
 			if(socket.sessionid !== undefined) {
 				this.removeSession(socket);
 			}
-			Log.info(socket.handshake.address + " disconnected.".yellow + ', reason : ' + description);
+			Log.info(socket.handshake.address + " disconnected.".yellow);
 		}.bind(this));
 
 	}.bind(this));
@@ -206,7 +175,7 @@ Server.prototype.removeSession = function(connection) {
 	delete GLOBAL.server.connections[sessionid] ; 
 	delete connection[sessionid] ;
 	GLOBAL.server.scene.removeAvatar(sessionid);
-	Log.info(connection.remoteAddress + ' logout from session '.green + sessionid) ;
+	Log.info(connection.handshake.address + ' logout from session '.green + sessionid) ;
 	GLOBAL.server.needSync = true;
 }
 

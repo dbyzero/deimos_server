@@ -1,4 +1,4 @@
-ActionGoingDown
+// ActionGoingDown
 /**
  *
  * ActionGoingDown class
@@ -35,8 +35,8 @@ ActionGoingDown.prototype = {
 
 		avatar.goingDown = status;
 
-		avatar.clientPosition.x = action[_t['MESSAGE']][_t['MESSAGE_POSITION']].x;
-		avatar.clientPosition.y = action[_t['MESSAGE']][_t['MESSAGE_POSITION']].y;
+		avatar.clientPosition.x = action[_t['MESSAGE_POSITION']].x;
+		avatar.clientPosition.y = action[_t['MESSAGE_POSITION']].y;
 		avatar.fixPositionWithClient(action.position);
 
 		avatar.unlanded();

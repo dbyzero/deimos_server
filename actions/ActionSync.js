@@ -35,10 +35,10 @@ ActionSync.prototype = {
 			if(avatar === null) return;
 
 			//kind of lagproof
-			avatar.clientPosition.x = e[_t.MESSAGE][_t.MESSAGE_POSITION].x;
-			avatar.clientPosition.y = e[_t.MESSAGE][_t.MESSAGE_POSITION].y;
+			avatar.clientPosition.x = e[_t.MESSAGE_POSITION].x;
+			avatar.clientPosition.y = e[_t.MESSAGE_POSITION].y;
 			avatar.fixPositionWithClient();
-			avatar.saying 			= e[_t.MESSAGE][_t.MESSAGE_SAYING];
+			avatar.saying 			= e[_t.MESSAGE_SAYING];
 
 			if(avatar.saying === 'mmm') {
 				for(var i=1;i>0;i--) {
