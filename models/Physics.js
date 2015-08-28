@@ -133,7 +133,7 @@
 		this.velocity = new Vector(0,0);
 	}
 
-	Physics.GRAVITY = new Vector( 0, 300 ) ;
+	Physics.GRAVITY = new Vector( 0, 1000 ) ;
 
 	//return the Physics class
 	module.exports = Physics ;

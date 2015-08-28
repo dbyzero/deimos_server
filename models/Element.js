@@ -146,9 +146,6 @@ Element.prototype.update = function(dt, now)
 	this.velocity.x += returnIntegrate.dv.x;
 	this.velocity.y += returnIntegrate.dv.y;
 
-	movement.x += this.velocity.x * dt/1000;
-	movement.y += this.velocity.y * dt/1000;
-
 	//move Element if forces are != 0
 	if(parseInt(movement.x) !== 0 || parseInt(movement.y) !== 0) {
 		this.toMove.add(movement);

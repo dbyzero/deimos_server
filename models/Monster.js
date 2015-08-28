@@ -64,11 +64,12 @@
 		data[_t['MESSAGE_MASS']]			= this.mass;
 		data[_t['MESSAGE_COLOR']]			= this.color;
 		data[_t['MESSAGE_DAMAGE']]			= this.damage;
-		data[_t['MESSAGE_ORIENTATION']]		= this.oriented;
 		data[_t['MESSAGE_CURRENT_HP']]		= this.currentHP;
 		data[_t['MESSAGE_HP']]				= this.hp;
 		data[_t['MESSAGE_MOVE_SPEED']]		= this.move_speed;
 		data[_t['MESSAGE_JUMP_SPEED']]		= this.jump_speed;
+		data[_t['MESSAGE_ANIMATION']] = {};
+		data[_t['MESSAGE_ANIMATION']][_t['MESSAGE_DIRECTION']] = this.animation.direction;
 		return data;
 	}
 
@@ -78,6 +79,7 @@
 			this.syncToAllClient();
 		}
 		Monster.super_.prototype.update.call(this,dt,now);
+
 	}
 
 	Monster.prototype.onAreaCollision = function(collisionCoord, collisionElement) {
@@ -118,9 +120,14 @@
 	Monster.prototype.onBlockCollisionLeftRight = function() {
 		if(this.velocity.x > 0) {
 			this.oriented = 'left';
+			this.animation.direction = 'left';
+			this.velocity.x = -this.move_speed;
 		} else {
 			this.oriented = 'right';
+			this.animation.direction = 'right';
+			this.velocity.x = this.move_speed;
 		}
+		this.syncToAllClient();
 	}
 
 
