@@ -147,7 +147,7 @@ Element.prototype.update = function(dt, now)
 	this.velocity.y += returnIntegrate.dv.y;
 
 	//move Element if forces are != 0
-	if(parseInt(movement.x) !== 0 || parseInt(movement.y) !== 0) {
+	if(parseFloat(movement.x) !== 0 || parseFloat(movement.y) !== 0) {
 		this.toMove.add(movement);
 	}
 }
@@ -179,7 +179,7 @@ Element.prototype.move = function() {
 		this.onAreaCollisionLeft();
 	}
 	if(this.position.x + this.size.x > zoneWidth) {
-		this.position.x = parseInt(zoneWidth - this.size.x) ;
+		this.position.x = parseFloat(zoneWidth - this.size.x) ;
 		this.onAreaCollisionRight();
 	}
 	if(this.position.y < 0) {
@@ -187,7 +187,7 @@ Element.prototype.move = function() {
 		this.onAreaCollisionTop();
 	}
 	if(this.position.y + this.size.y > zoneHeight) {
-		this.position.y = parseInt(zoneHeight - this.size.y) ;
+		this.position.y = parseFloat(zoneHeight - this.size.y) ;
 		this.onAreaCollisionBottom();
 	}
 
@@ -639,7 +639,7 @@ Element.prototype.attackRanged = function() {
 		this.attackProcess.projectileId,
 		this.position.x + (this.oriented === 'right' ? this.projectileTranslation.right.x : this.projectileTranslation.left.x),
 		this.position.y + (this.oriented === 'right' ? this.projectileTranslation.right.y : this.projectileTranslation.left.y),
-		(this.oriented === 'right' ? parseInt(this.attackProcess.initialX) : -1 * parseInt(this.attackProcess.initialX)),
+		(this.oriented === 'right' ? parseFloat(this.attackProcess.initialX) : -1 * parseFloat(this.attackProcess.initialX)),
 		this.attackProcess.initialY,
 		this.id,
 		this.attackProcess.projectileColor,

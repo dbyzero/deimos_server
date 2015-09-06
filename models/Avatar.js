@@ -237,11 +237,11 @@
 		data[_t['ID']] = this.id;
 		data[_t['MESSAGE_GOING_DOWN']] = this.goingDown;
 		data[_t['MESSAGE_POSITION']] = {};
-		data[_t['MESSAGE_POSITION']].x = parseInt(this.position.x);
-		data[_t['MESSAGE_POSITION']].y = parseInt(this.position.y);
+		data[_t['MESSAGE_POSITION']].x = parseFloat(this.position.x);
+		data[_t['MESSAGE_POSITION']].y = parseFloat(this.position.y);
 		data[_t['MESSAGE_VELOCITY']] = {};
-		data[_t['MESSAGE_VELOCITY']].x = (parseInt(this.velocity.x)/* + parseInt(sumWaitingForce.x)*/);
-		data[_t['MESSAGE_VELOCITY']].y = (parseInt(this.velocity.y)/* + parseInt(sumWaitingForce.y)*/);
+		data[_t['MESSAGE_VELOCITY']].x = (parseFloat(this.velocity.x)/* + parseFloat(sumWaitingForce.x)*/);
+		data[_t['MESSAGE_VELOCITY']].y = (parseFloat(this.velocity.y)/* + parseFloat(sumWaitingForce.y)*/);
 		data[_t['MESSAGE_ACCELERATION']] = {};
 		data[_t['MESSAGE_ACCELERATION']].x = this.acceleration.x;
 		data[_t['MESSAGE_ACCELERATION']].y = this.acceleration.y;
@@ -269,8 +269,8 @@
 
 	Avatar.prototype.fixPositionWithClient = function() {
 		//kind of lagproof
-		var deltaX = this.clientPosition.x - parseInt(this.position.x);
-		var deltaY = this.clientPosition.y - parseInt(this.position.y);
+		var deltaX = this.clientPosition.x - parseFloat(this.position.x);
+		var deltaY = this.clientPosition.y - parseFloat(this.position.y);
 		var squareHypothenus = deltaX*deltaX + deltaY*deltaY;
 		if( squareHypothenus < Config.Client.SQUARE_AUTHORITY_DISTANCE ) {
 			this.position.x = this.clientPosition.x;

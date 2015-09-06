@@ -38,10 +38,10 @@ ActionMove.prototype = {
 						if(avatar === null) return;
 
 						if(action.type === _t['LEFT']) {
-							var force = new Vector2(-1 * parseInt(avatar.move_speed), 0);
+							var force = new Vector2(-1 * parseFloat(avatar.move_speed), 0);
 							avatar.oriented = 'left';
 						} else {
-							var force = new Vector2( parseInt(avatar.move_speed), 0);
+							var force = new Vector2( parseFloat(avatar.move_speed), 0);
 							avatar.oriented = 'right';
 						}
 
@@ -56,7 +56,7 @@ ActionMove.prototype = {
 							var mvt = new UserMovement(
 								action.id,
 								action.type, 
-								parseInt(action.startTimestamp),
+								parseFloat(action.startTimestamp),
 								force
 							);
 							avatar.addUserInputs(mvt);

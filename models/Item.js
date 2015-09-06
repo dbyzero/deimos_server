@@ -40,11 +40,11 @@
 		data[_t['ID']] = this.id;
 		data[_t['MESSAGE_ELEMENT_ID']] = this.templateid;
 		data[_t['MESSAGE_POSITION']] = {};
-		data[_t['MESSAGE_POSITION']].x = parseInt(this.position.x);
-		data[_t['MESSAGE_POSITION']].y = parseInt(this.position.y);
+		data[_t['MESSAGE_POSITION']].x = parseFloat(this.position.x);
+		data[_t['MESSAGE_POSITION']].y = parseFloat(this.position.y);
 		data[_t['MESSAGE_VELOCITY']] = {};
-		data[_t['MESSAGE_VELOCITY']].x = parseInt(this.velocity.x);
-		data[_t['MESSAGE_VELOCITY']].y = parseInt(this.velocity.y);
+		data[_t['MESSAGE_VELOCITY']].x = parseFloat(this.velocity.x);
+		data[_t['MESSAGE_VELOCITY']].y = parseFloat(this.velocity.y);
 		data[_t['MESSAGE_ACCELERATION']] = {};
 		data[_t['MESSAGE_ACCELERATION']].x = this.acceleration.x;
 		data[_t['MESSAGE_ACCELERATION']].y = this.acceleration.y;

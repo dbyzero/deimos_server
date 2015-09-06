@@ -19,7 +19,7 @@ var config= {};
 config['localhost'] = {};
 
 config['localhost'].Engine = {};
-config['localhost'].Engine.MAIN_LOOP_DELAY = 33; //40 = 25FPS, 33 = 33FPS, 20 = 50FPS, 
+config['localhost'].Engine.MAIN_LOOP_DELAY = 16; //40 = 25FPS, 33 = 33FPS, 20 = 50FPS, 
 config['localhost'].Engine.SYNCHRO_MAX_DELAY = 9000;
 config['localhost'].Engine.SYNCHRO_MIN_DELAY = 3000;
 config['localhost'].Server = {};

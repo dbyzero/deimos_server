@@ -17,11 +17,11 @@ var Vector2 = function(x,y) {
 }
 
 Vector2.Sum = function(vector1,vector2) {
-    return new Vector2(parseInt(vector1.x) + parseInt(vector2.x), parseInt(vector1.y) + parseInt(vector2.y)) ;
+    return new Vector2(parseFloat(vector1.x) + parseFloat(vector2.x), parseFloat(vector1.y) + parseFloat(vector2.y)) ;
 }
 
 Vector2.Sub = function(vector1,vector2) {
-    return new Vector2(parseInt(vector1.x) - parseInt(vector2.x), parseInt(vector1.y) - parseInt(vector2.y)) ;
+    return new Vector2(parseFloat(vector1.x) - parseFloat(vector2.x), parseFloat(vector1.y) - parseFloat(vector2.y)) ;
 }
 
 Vector2.Dot = function(vector1,vector2) {
