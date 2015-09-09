@@ -156,31 +156,31 @@
 		movement.y = parseFloat(movement.y);
 		this.toMove.add(movement);
 
-			if( this.orientation === 'left' ) {
-		if(this.serverPosition.x < this.position.x) {
-			//the Math.min is used to not go through the server position
-			this.toMove.x = -1 * Math.min(
-				(this.move_speed * dt/1000),
-				(this.position.x - this.serverPosition.x)
-			);
+		if( this.orientation === 'left' ) {
+			if(this.serverPosition.x < this.position.x) {
+				//the Math.min is used to not go through the server position
+				this.toMove.x = -1 * Math.min(
+					(this.move_speed * dt/1000),
+					(this.position.x - this.serverPosition.x)
+				);
+			}
+			if(this.serverPosition.x > this.position.x) {
+				this.toMove.x = 0;
+			}
 		}
-		if(this.serverPosition.x > this.position.x) {
-			this.toMove.x = 0;
+		if( this.orientation === 'right' ) {
+			if(this.serverPosition.x > this.position.x) {
+				//the Math.min is used to not go through the server position
+				this.toMove.x = Math.min(
+					(this.move_speed * dt/1000),
+					(this.serverPosition.x - this.position.x)
+				);
+			}
+			if(this.serverPosition.x < this.position.x) {
+				// console.log('stop it');
+				this.toMove.x = 0;
+			}
 		}
-	}
-	if( this.orientation === 'right' ) {
-		if(this.serverPosition.x > this.position.x) {
-			//the Math.min is used to not go through the server position
-			this.toMove.x = Math.min(
-				(this.move_speed * dt/1000),
-				(this.serverPosition.x - this.position.x)
-			);
-		}
-		if(this.serverPosition.x < this.position.x) {
-			console.log('stop it');
-			this.toMove.x = 0;
-		}
-	}
 	};
 
 

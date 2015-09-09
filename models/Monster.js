@@ -75,7 +75,7 @@
 
 	Monster.prototype.update = function(dt, now) {
 		if(this.isLanded && parseInt(Math.random()*100) === 1) {
-			this.velocity.y = -700-parseInt(Math.random()*700);
+			this.velocity.y = -700 - parseInt(Math.random() * 700);
 			this.syncToAllClient();
 		}
 		Monster.super_.prototype.update.call(this,dt,now);
