@@ -27,8 +27,8 @@ ActionAttack.prototype = {
 		var avatar_hash = crypto.createHash('md5').update(connection.sessionid).digest("hex");
 		var avatar = GLOBAL.server.scene.avatars[avatar_hash];
 		if(avatar === null) return;
-		avatar.clientPosition.x = action[_t.MESSAGE][_t.MESSAGE_POSITION].x;
-		avatar.clientPosition.y = action[_t.MESSAGE][_t.MESSAGE_POSITION].y;
+		avatar.clientPosition.x = action[_t.MESSAGE_POSITION].x;
+		avatar.clientPosition.y = action[_t.MESSAGE_POSITION].y;
 		avatar.fixPositionWithClient();
 		avatar.attack();
 	},

@@ -623,7 +623,7 @@ Element.prototype.attack = function() {
 }
 
 Element.prototype.attackMelee = function() {
-	var attackZone = GLOBAL.server.scene.createAttackZone(
+	GLOBAL.server.scene.createAttackZone(
 		{
 			'x':this.position.x + (this.oriented === 'right' ? this.size.x : -45),
 		 	'y':this.position.y
