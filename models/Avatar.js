@@ -184,7 +184,7 @@
 	};
 
 
-	Avatar.prototype.syncToAllClient = function(e) {
+	Avatar.prototype.syncToAllClient = function() {
 		var _t = GLOBAL._t;
 		MessageHandler.sendMessageToAll(_t['ACTION_SYNC_AVATAR'],this.getCleanData());
 	}
@@ -279,6 +279,10 @@
 		}
 	}
 
+	Avatar.prototype.onBlockCollision = function(collisionElement) {
+		this.syncToAllClient();
+	}
+
 	Avatar.prototype.onElementCollision = function(collisionElement) {
 		Avatar.super_.prototype.onElementCollision.call(this, collisionElement);
 		if(collisionElement instanceof Item) {
@@ -289,6 +293,7 @@
 			collisionElement.skipAvatars.push(this.id);
 			this.touched(collisionElement);
 		}
+		this.syncToAllClient();
 	}
 
 	Avatar.prototype.addItem = function(item) {
