@@ -14,11 +14,11 @@ var _                   =   require('underscore');
 var http                =   require('http');
 var colors              =   require('colors');
 var socketio            =   require('socket.io');
-// var WebSocketServer     =   require('websocket').server;
 var util                =   require('util');
 var events              =   require('events');
 var crypto              =   require('crypto');
 var restify             =   require('restify');
+var Promise             =   require('promise');
 var Scene               =   require('./Scene.js');
 var Config              =   require('../Config.js');
 var Loop                =   require('../utils/Loop.js');
@@ -47,7 +47,15 @@ var Server = function() {
 
 	//to use it in connection methods
 	var server = this;
-	var _t = GLOBAL._t;
+
+}
+
+util.inherits(Server, events.EventEmitter);
+
+/**
+ * Init method
+ * */
+Server.prototype.init = function() {
 
 	/**
 	 * Define Websocket Server 
@@ -67,7 +75,7 @@ var Server = function() {
 		Log.info('Connection'.yellow + ' from ' + socket.handshake.address);
 
 		//bind action to socket
-		ActionHandle.bind(socket);
+		// ActionHandle.bind(socket);
 
 		//note : errors trigg close event too
 		socket.on('disconnect', function(reason) {
@@ -80,63 +88,60 @@ var Server = function() {
 
 	}.bind(this));
 
-}
-
-util.inherits(Server, events.EventEmitter);
-
-/**
- * Init method
- * */
-Server.prototype.init = function() {
-	
-	//start websocket
-	this.httpServer.listen(this.listen_port, function() {
-		Log.success('Websocket binded'.green.bold);
-
-		//Define and connect API
-		Log.info('Connecting to API...');
-		this.API = restify.createJsonClient({
-			url: Config.API.url,
-			agent:false,
-			headers:{
-				// connection:'close'
-			}
-		});
-		Log.success('API connected'.green.bold);
-
-		this.emit('INITIALIZED',this);
-	}.bind(this));
-
 };
 
 
 Server.prototype.start = function() {
-	//to change
-	this.API.get(encodeURI('/level/byname/'+Config.level),function(err,req,res,level){
-			console.log('Level template : ');
-			console.log(level);
+	//start websocket
+	var gameLevel = process.env.SERVER_NAME;
+	return new Promise(function(resolv,reject){
+		this.httpServer.listen(this.listen_port, function() {
+			Log.success('Websocket binded'.green.bold);
 
-			if(err) throw err;
-			this.scene = new Scene(Config, level);
+			//Define and connect API
+			Log.info('Connecting to API...');
+			this.API = restify.createJsonClient({
+				url: Config.API.url,
+				agent:false,
+				headers:{
+					// connection:'close'
+				}
+			});
+			Log.success('API connected'.green.bold);
 
-			this.API.del(encodeURI('/session/clean/'+this.scene.name),function(err,req,res,data){
-					if(err) throw err;
+			//start game on level loaded
+			this.API.get(encodeURI('/gamearea/byname/'+gameLevel),
+				function(err,req,res){
+					Log.info('Level : '+gameLevel);
+
+					if(err) {
+						reject(err);
+						return;
+					}
+					this.scene = new Scene(Config, gameLevel);
+
+					/**
+					 * GAME LOOP 
+					 */
+					this.loop = new Loop( 'main_loop', Config.Engine.MAIN_LOOP_DELAY, 0 ) ;
+					var loopingFunction = function() {
+						this.update();
+					}
+
+					this.loop.start(loopingFunction.bind(this)) ;
+
+					var levelData = JSON.parse(res.body);
+
+					resolv({
+						"width":levelData.width,
+						"height":levelData.height,
+						"areaDomID":levelData.areaDomID,
+						"blocks":levelData.blocks
+					});
 				}.bind(this)
 			);
-			var _t = GLOBAL._t;
-			this.loop = new Loop( 'main_loop', Config.Engine.MAIN_LOOP_DELAY, 0 ) ;
-
-			/**
-			 * GAME LOOP 
-			 */
-			var loopingFunction = function() {
-				this.update();
-			}
-
-			this.loop.start(loopingFunction.bind(this)) ;
-			this.emit('STARTED',this);
-		}.bind(this)
-	);
+		}.bind(this));
+	}.bind(this))
 };
 
 Server.prototype.update = function() {
@@ -160,10 +165,7 @@ Server.prototype.update = function() {
 
 Server.prototype.syncScene = function() {
 	var now = new Date().getTime();
-	// var message = {};
-	// message[_t.ACTION] = _t.ACTION_SYNC;
-	// message[_t.MESSAGE] = this.scene.getCleanData(now);
-	MessageHandler.sendMessageToAll(_t.ACTION_SYNC, this.scene.getCleanData(now));
+	MessageHandler.sendMessageToAll(GLOBAL._t.ACTION_SYNC, this.scene.getCleanData(now));
 	this.needSync = false;
 	this.lastSync = now;
 	this.lastAliveSync = now;

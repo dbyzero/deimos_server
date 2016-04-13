@@ -23,14 +23,14 @@ try {
 	GLOBAL.server = new Server() ;
 
 	GLOBAL.server.init();
-
-	GLOBAL.server.on('INITIALIZED',function(){
-		server.start();
-	}) ;
-
-	GLOBAL.server.on('STARTED',function(){
-		Log.success('Server started on port '+Config.Server.server_port+'!'.green);
-	}) ;
+	GLOBAL.server.start()
+		.done(function(levelData){
+			Log.success('Server started on port '+Config.Server.server_port+'!'.green);
+			Log.success(levelData);
+		}, function(err){
+			Log.error(err);
+			console.log(err);
+		});
 } catch(e) {
 	console.log("error catched in main script")
 	console.log(e);
